@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import TodoListEntry from './TodoListEntry.jsx';
+import axios from 'axios';
 
 export default class TodoList extends Component {
   constructor(props) {
@@ -7,20 +8,46 @@ export default class TodoList extends Component {
     this.state = {
       todo: '',
       priority: 0,
-      todos: [{ todo: 'eat', priority: 10 }, { todo: 'sleep', priority: 10 }],
+      todos: [],
     };
+    this.getTodos = this.getTodos.bind(this);
+    this.postTodo = this.postTodo.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
 
+  componentDidMount() {
+    this.getTodos();
+  }
+
+  getTodos() {
+    axios.get('/api/todos')
+      .then((response) => {
+        this.setState({
+          todos: response.data,
+        });
+      })
+      .catch(error => console.log(error));
+  }
+
+  postTodo() {
+    const { todo, priority } = this.state;
+    axios.post('/api/todos', { name: todo, priority })
+      .then(() => {
+        this.getTodos();
+      })
+      .catch(error => console.log(error));
+  }
+
   handleSubmit(event) {
     event.preventDefault();
-    const { todo, priority, todos } = this.state;
-    const newTodos = [...todos];
-    newTodos.push({ todo, priority });
-    this.setState({
-      todos: newTodos,
-    }, () => console.log(this.state));
+    this.postTodo();
+    // const { todo, priority, todos } = this.state;
+    // const newTodos = [...todos];
+    // newTodos.push({ todo, priority });
+    // this.setState({
+    //   todos: newTodos,
+    // }, () => console.log(this.state));
   }
 
   handleChange(event) {
@@ -47,7 +74,7 @@ export default class TodoList extends Component {
             <TodoListEntry
               key={index}
               index={index}
-              todo={todo.todo}
+              todo={todo.name}
               priority={todo.priority}
             />
           ))}
