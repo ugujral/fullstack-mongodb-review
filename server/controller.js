@@ -1,3 +1,5 @@
+const Todo = require('../database/index.js');
+
 const controller = {
   get: (req, res) => {
     res.send('hello from get');
