@@ -13,6 +13,7 @@ export default class TodoList extends Component {
     this.getTodos = this.getTodos.bind(this);
     this.postTodo = this.postTodo.bind(this);
     this.deleteTodo = this.deleteTodo.bind(this);
+    this.updateTodo = this.updateTodo.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
@@ -42,6 +43,17 @@ export default class TodoList extends Component {
 
   deleteTodo(_id) {
     axios.delete(`/api/todos/${_id}`)
+      .then(() => {
+        this.getTodos();
+      })
+      .catch(error => console.log(error));
+  }
+
+  updateTodo(index, change) {
+    const target = this.state.todos[index];
+    const _id = target._id;
+    const newPriority = target.priority + change;
+    axios.put(`/api/todos/${_id}`, { priority: newPriority })
       .then(() => {
         this.getTodos();
       })
@@ -85,6 +97,7 @@ export default class TodoList extends Component {
               index={index}
               todo={todo}
               deleteTodo={this.deleteTodo}
+              updateTodo={this.updateTodo}
             />
           ))}
         </div>
