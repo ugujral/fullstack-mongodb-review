@@ -6,6 +6,7 @@
   "scripts": {
     "start": "nodemon server/index.js",
     "build": "webpack -d --watch",
+    "seed": "node database/seed.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -30,8 +31,10 @@
     "mongoose": "^4.9.6",
     "morgan": "^1.9.1",
     "nodemon": "^1.18.10",
+    "path": "^0.12.7",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
+    "request": "^2.88.0",
     "webpack": "^2.2.1"
   }
 }
